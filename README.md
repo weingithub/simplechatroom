@@ -1,10 +1,10 @@
 # simplechatroom
 create a simple chat room in linux, include client and server.
 
-`make test`
-create libtest.so
-`make server`
-build  executive file: server
-`make client`
-build executive file: client
+`make test`<br>
+create libtest.so<br>
+`make server`<br>
+build  executive file: server<br>
+`make client`<br>
+build executive file: client<br>
 
