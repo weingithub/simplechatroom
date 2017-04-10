@@ -9,4 +9,4 @@ build  executive file: server<br>
 build executive file: client<br>
 
 ## thread poll
-just a simple try and is not applicable tolong connection or block call such as read,accept.
+just a simple try and it's not applicable tolong connection or block call such as read,accept.
