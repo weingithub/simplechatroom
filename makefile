@@ -8,21 +8,11 @@ SOURCE = base.cpp epooldemo.cpp threadpool.cpp
 
 SERVER = server
 CLIENT = client
-
+PLINKOBJ =  -lpthread
 LINKOBJ = -ltest -lpthread
 
 test:
-	$(CPP) $(Flag) -shared -o $(TARGET) $(SOURCE)
-
-
-#base.o:\
-#	$(CPP) $(Flag) -c base.cpp 
-
-#epooldemo.o:
-#	 $(CPP) $(Flag) -c epooldemo.cpp
-
-#threadpool.o:
-#	$(CPP) $(Flag) -c threadpool.cpp
+	$(CPP) $(Flag) -shared -o $(TARGET) $(SOURCE) $(PLINKOBJ)
 
 server: 
 	$(CPP) -g -o $(SERVER) server.cpp $(LINKOBJ)
