@@ -2,7 +2,7 @@ CPP = g++
 Flag = -g -fPIC
 TARGET =libtest.so
 
-.PHONY: all clean test server client
+.PHONY: all clean test server client install
 OBJECT = base.o epooldemo.o threadpool.o
 SOURCE = base.cpp epooldemo.cpp threadpool.cpp 
 
@@ -19,6 +19,9 @@ server:
 
 client:
 	$(CPP) -g -o $(CLIENT) client.cpp $(LINKOBJ)
+
+install:
+	cp -f $(TARGET) /usr/local/lib
 
 clean:
 	rm -f $(OBJECT) $(TARGET)

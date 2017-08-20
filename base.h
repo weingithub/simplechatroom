@@ -11,8 +11,12 @@ public:
     
     virtual int Accept() {}
 
-    static int Recv(int fd, std::string & msg);
+    static int Recv(int fd, std::string & msg, unsigned len = 0);
     static int Send(int fd, const char * pbuff, int len);
+
+    static int SmallToBigEndian(unsigned char *pData, unsigned int uDataLen);
+
+    static int BigToSmallEndian(unsigned char *pData, unsigned int uDataLen);
 
     int GetSockfd() {return sockfd;}
 protected:

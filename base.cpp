@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <fcntl.h> 
+//#include <algorithm>
 
 using namespace std;
 
@@ -15,18 +16,32 @@ Socket::Socket():
     
 }
 
-int Socket::Recv(int fd, string & msg)
+int Socket::Recv(int fd, string & msg, unsigned len)
 {
     char buff[MAX_BUFF] = {0};
     
     int count = 0;
+    
+    int readlen;
+    unsigned maxlen = MAX_BUFF;
+    //读取指定长度的数据
+    if (len > 0)
+    {
+        readlen = min(len, maxlen);
+    }
+    else
+    {
+        readlen = MAX_BUFF;
+    }
+
+    int sumlen = 0;
 
     while(1)
     {
         memset(buff, 0, sizeof(buff));
 
-        int ret= read(fd, buff, sizeof(buff));
-        
+        int ret= read(fd, buff, readlen);
+       
         if (0 == ret)
         {
             //没有数据可读，
@@ -35,6 +50,14 @@ int Socket::Recv(int fd, string & msg)
         else if (ret > 0)
         {
             msg += string(buff, ret);
+
+            sumlen += ret;
+
+            //判断是否读完指定字节的数据
+            if (len > 0 && sumlen >= len)
+            {
+                return 0;
+            }
         }
         else
         {
@@ -76,6 +99,30 @@ int Socket::Send(int fd, const char * pbuff, int len)
     return 0;
 }
 
+int Socket::SmallToBigEndian(unsigned char *pData, unsigned int uDataLen)
+{
+    unsigned char *pStart = pData;
+    unsigned char *pEnd   = pData + uDataLen - 1;
+    unsigned char cTmp;
+     
+    while(pEnd > pStart)
+    {
+        cTmp    = *pStart;
+        *pStart = *pEnd;
+        *pEnd   = cTmp;
+ 
+        ++pStart;
+        --pEnd;
+    }
+     
+    return 0;
+}
+
+int Socket::BigToSmallEndian(unsigned char *pData, unsigned int uDataLen)
+{
+    return SmallToBigEndian(pData, uDataLen);
+}
+
 int SocketServer::CreateSock(const char * ip, int port, int nlisten)
 {
     //first-create socket
@@ -102,6 +149,10 @@ int SocketServer::CreateSock(const char * ip, int port, int nlisten)
     }
 
     servaddr.sin_port = htons(port);  //host to network short
+
+    //支持端口复用
+    int  optval=1;
+    setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,(char*)&optval,sizeof(optval));
 
     int ret = bind(fd, (sockaddr *)&servaddr, sizeof(servaddr));
 
