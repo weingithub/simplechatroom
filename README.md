@@ -11,4 +11,4 @@ build executive file: client<br>
 build a mysql unit test.
 
 ## thread poll
-just a simple try and it's not applicable tolong connection or block call such as read,accept.
+just a simple try and it's not compatible with long connection or block call such as read,accept.
