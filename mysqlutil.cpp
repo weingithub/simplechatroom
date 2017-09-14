@@ -135,7 +135,15 @@ int MysqlUtil::FetchRows(std::vector<std::vector<std::string> > & rows)
 
 		for (int j = 0; j < num_fields; ++j)
 		{
-			rows[i].push_back(m_row[j]);
+            //处理NULL的情况
+            if (NULL == m_row[j])
+            {
+                rows[i].push_back("NULL");
+            }
+            else
+            {
+			    rows[i].push_back(m_row[j]);
+            }
 		}
 
 		++i;
